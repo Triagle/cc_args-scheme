@@ -1,8 +1,3 @@
-#!/bin/bash
-#|
-exec csi -ss $0 ${1+"$@"}
-exit
-|#
 (require-extension shell)
 (require-extension list-utils)
 (use srfi-1)
@@ -24,5 +19,7 @@ exit
                            (display s)
                            (newline)) args))))
 (define (main args)
-  (write-configuration (parse-arguments (cdr args)))
-  (run ,args))
+  (when (not (length=0? args))
+      (write-configuration (parse-arguments (cdr args)))
+      (run ,args)))
+(main (cdr (argv)))
