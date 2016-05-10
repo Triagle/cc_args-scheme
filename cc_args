@@ -1,0 +1,28 @@
+#!/bin/bash
+#|
+exec csi -ss $0 ${1+"$@"}
+exit
+|#
+(require-extension shell)
+(require-extension list-utils)
+(use srfi-1)
+;; Customize this list of options to add extra options recognized by cc_args
+(define accepted-opts
+  '("-I" "-D" "-isystem" "-include" "-std=" "-W" "-pedantic" "-ansi"))
+;; Customize this list of options to include any space separated options (e.g. -I include) recognized by cc_args
+(define arg-opts '("-I" "-D" "-isystem" "-include"))
+(define (string-starts-with-any string lst)
+  (not (length=0? (filter (lambda (s) (substring=? s string )) lst))))
+(define (parse-arguments args)
+  (filter (lambda (s) (string-starts-with-any s accepted-opts))
+          (fold (lambda (lst acc)
+                  (if (member (car lst) arg-opts)
+                      (append acc (list (foldl string-append "" lst))) (append acc lst))) '() (section args 2 2))))
+(define (write-configuration args)
+  (with-output-to-file ".clang_complete"
+    (lambda () (for-each (lambda (s)
+                           (display s)
+                           (newline)) args))))
+(define (main args)
+  (write-configuration (parse-arguments (cdr args)))
+  (run ,args))

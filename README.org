@@ -1,0 +1,35 @@
+#+TITLE: CC_Args - Scheme
+
+* What is it?
+This program is an implementation of the =cc_args.py= program from the
+[[https://github.com/Rip-Rip/clang_complete][clang_complete]] repo. This implementation is done entirely in scheme.
+* Why is it?
+This program was created due to a certain baggage that =cc_args.py= appears to
+carry (also because I had absolutely nothing else to do at the time), it's well over 101 lines despite not needing to be. It has been entirely
+rewritten in scheme (chicken scheme to be exact) and has some notable
+advantages.
+- Maintainability :: This implementation abstracts a lot of the details that
+     needed to be done by hand in =cc_args.py=. Namely accepted options have been
+     abstracted, allowing a user to add any extra ones that they may see as
+     useful. The same has also been done for arguments with a space between them
+     and their subarguments (e.g "-I include").
+- Complexity :: There is very little going on in this code, it's kinda tiny,
+     only 27 lines.
+Functionally, in stock, it does exactly the same thing as =cc_args.py=.
+* Installation
+Provided you have[[http://www.call-cc.org/][ Chicken Scheme]], type the following into the terminal after
+cloning the repo.
+#+BEGIN_SRC shell
+  chicken-install -s shell list-utils
+#+END_SRC
+Next move =cc_args= to the desired location (probably somewhere in your PATH).
+* Usage
+Simply make it the compiler used by makefiles and it will generate
+=.clang_complete= files where ever you compile. For example
+#+BEGIN_SRC shell
+  make CC="cc_args gcc"
+#+END_SRC
+or alternatively if you are using cmake
+#+BEGIN_SRC shell
+  CC="cc_args gcc" cmake .
+#+END_SRC
