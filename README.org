@@ -22,6 +22,10 @@ cloning the repo.
 #+BEGIN_SRC shell
   chicken-install -s shell list-utils
 #+END_SRC
+Next compile the program
+#+BEGIN_SRC shell
+  csc cc_args.scm
+#+END_SRC
 Next move =cc_args= to the desired location (probably somewhere in your PATH).
 * Usage
 Simply make it the compiler used by makefiles and it will generate
